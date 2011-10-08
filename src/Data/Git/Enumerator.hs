@@ -2,28 +2,35 @@ module Data.Git.Enumerator where
 
 -------------------------------------------------------------------------------
 
-import           Data.Enumerator (Iteratee(..), Step(..), Enumerator, returnI)
+import           Control.Monad.Trans (MonadIO, liftIO)
+import           Data.ByteString (ByteString)
+import qualified Data.Attoparsec as P
+import           Data.Enumerator (
+    Iteratee (..)
+  , Step (..)
+  , Enumerator
+  , Stream (..)
+  , returnI
+  )
 import           System.FilePath (FilePath)
 
--- import qualified HSH as Shell
+import qualified HSH as Shell
 
 -------------------------------------------------------------------------------
 import           System.Console.Options (CommandFlag(..))
 import           Data.Git.Types 
 import qualified Data.Git.Parser as GP
 
---enumGitLog :: Monad m 
---           => FilePath 
---           -> [CommandFlag]
---           -> Enumerator GitLog m b
---enumGitLog _ _ step@(Yield {})= returnI step
---enumGitLog repoPath commandOpts0 (Continue consumer) = 
---    Shell.runIO $ "git log " ++ gitOptions
---  where
---    commandOpts = ShortStat 
---                : (LogFormat "") 
---                : commandOpts0
---    gitOptions = concatMap show commandOpts
+enumGitLog :: MonadIO m 
+           => [CommandFlag]
+           -> Enumerator GitCommit m b
+enumGitLog _ step@(Yield {})= returnI step
+enumGitLog commandOpts0 (Continue consumer) = Iteratee $ do
+    output <- liftIO . Shell.run $ gitLogCommand commandOpts0
+    let result = P.parseOnly GP.parse output
+    case result of
+      Right logs -> runIteratee $ consumer (Chunks logs)
+      Left e     -> error e
 
 gitLogCommand :: [CommandFlag] -> String
 gitLogCommand options0 = "git log " ++ options

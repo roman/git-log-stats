@@ -4,14 +4,18 @@ module Data.Git.Types where
 import Data.ByteString (ByteString)
 import Data.Lens.Template (makeLenses)
 
-data GitLog 
-  = GitLog  {
-    _commitHash   :: ByteString
-  , _commitAuthor :: ByteString
-  , _commitDate   :: ByteString
-  , _addedLines   :: Int
-  , _removedLines :: Int
+type CommitHash = ByteString
+type CommitAuthor = ByteString
+type CommitDate = ByteString
+
+data GitCommit 
+  = GitCommit  {
+    _commitHash   :: CommitHash
+  , _commitAuthor :: CommitAuthor
+  , _commitDate   :: CommitDate
+  , _addedLines   :: Integer
+  , _removedLines :: Integer
   }
   deriving (Show)
 
-makeLenses [''GitLog]
+makeLenses [''GitCommit]

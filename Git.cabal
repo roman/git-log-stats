@@ -53,11 +53,13 @@ Executable Git
     base,
     bytestring,
     cmdlib,
+    containers,
     data-lens,
     data-lens-template,
     enumerator,
     filepath,
-    HSH
+    HSH,
+    mtl
 
   
   -- Modules not exported by this package.

@@ -12,20 +12,23 @@ tillComma = takeWhile (/= ',')
 tillNewline = takeWhile (not . isNewline)
 
 pLogEntry = 
-    GitLog <$> (tillComma <* char ',')
-           <*> (skipSpace *> 
-                tillComma <* 
-                char ',')
-           <*> (skipSpace *>
-                tillNewline)
-           <*> (skipSpace *>
-                tillComma *> 
-                char ','  *> 
-                skipSpace *> 
-                decimal)
-           <*> (tillComma *>
-                char ','  *>
-                skipSpace *> 
-                decimal)
+    GitCommit <$> (skipSpace *>
+                   tillComma <* 
+                   char ',')
+              <*> (skipSpace *> 
+                   tillComma <* 
+                   char ',')
+              <*> (skipSpace *>
+                   tillNewline)
+              <*> (skipSpace *>
+                   tillComma *> 
+                   char ','  *> 
+                   skipSpace *> 
+                   decimal)
+              <*> (tillComma *>
+                   char ','  *>
+                   skipSpace *> 
+                   decimal   <*
+                   tillNewline)
                
 parse = many pLogEntry
