@@ -1,0 +1,4 @@
+*.swp
+dist/*
+log/*
+cabal-dev/*
