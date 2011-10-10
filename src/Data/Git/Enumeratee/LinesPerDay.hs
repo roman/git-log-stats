@@ -26,6 +26,6 @@ trackLinesPerDay step@(Continue consumer) = continue go
       forM_ cs $ \commit -> 
         registerLPD (getL commitAuthor commit)
                     (getL commitDate   commit)
-                    (getL addedLines   commit)
+                    (getAddedLines     commit)
       runIteratee $ consumer stream >>== trackLinesPerDay
     go EOF = consumer EOF >>== \step -> yield step EOF

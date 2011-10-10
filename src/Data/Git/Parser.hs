@@ -1,17 +1,26 @@
 module Data.Git.Parser where
 
-import Prelude hiding (takeWhile)
-import Control.Applicative hiding (many)
-import Data.Attoparsec.Char8
+import           Prelude hiding (takeWhile)
+import           Control.Applicative hiding (many)
+import           Data.Attoparsec.Char8
 
+import qualified Data.Set as Set
 
-import Data.Git.Types
+import           Data.Git.Types
 
 isNewline c = c == '\n'
 tillComma = takeWhile (/= ',')
 tillNewline = takeWhile (not . isNewline)
 
-pLogEntry repoPath =
+pCommitFiles =
+    CommitFile <$> (skipSpace *>
+                    decimal)
+               <*> (skipSpace *>
+                    decimal)
+               <*> (skipSpace *>
+                    tillNewline)
+
+pCommitEntry repoPath =
     GitCommit <$> pure repoPath
               <*> (skipSpace *>
                    tillComma <*
@@ -21,15 +30,7 @@ pLogEntry repoPath =
                    char ',')
               <*> (skipSpace *>
                    tillNewline)
-              <*> (skipSpace *>
-                   tillComma *>
-                   char ','  *>
-                   skipSpace *>
-                   decimal)
-              <*> (tillComma *>
-                   char ','  *>
-                   skipSpace *>
-                   decimal   <*
-                   tillNewline)
+              <*> (Set.fromList <$>
+                   many1 pCommitFiles)
 
-parse repoPath = many (pLogEntry repoPath)
+parse repoPath = many (pCommitEntry repoPath)

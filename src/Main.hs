@@ -32,6 +32,6 @@ main = parseOpts $ \repos options -> do
     let enum = enumRepos options repos
     let it   = trackLinesPerDay =$ EL.consume
     (logList, state) <- runAppMonad $ run_ (enum $$ it)
-    let result = avgLinesPerDay "romanandreg@gmail.com" state
+    let result = avgLinesPerDay "Roman Gonzalez" state
     putStrLn $ "The avg code per day for Roman is " ++ show result
     mapM_ print logList

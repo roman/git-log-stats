@@ -27,10 +27,10 @@ enumGitLog :: MonadIO m
            -> Enumerator GitCommit m b
 enumGitLog _ _ step@(Yield {})= returnI step
 enumGitLog commandOpts0 repoPath (Continue consumer) = Iteratee $ do
-    repoName <- liftIO $ 
-                Shell.basename `fmap` 
+    repoName <- liftIO $
+                Shell.basename `fmap`
                 Shell.abspath repoPath
-    output   <- liftIO                  .
+    output <- liftIO                   .
               Shell.bracketCD repoPath .
               Shell.run                $
               gitLogCommand commandOpts0
@@ -43,7 +43,7 @@ gitLogCommand :: [CommandFlag] -> String
 gitLogCommand options0 = "git log " ++ options
   where
     options1 = ShortStat
-             : LogFormat "%H, %ae, %ai"
+             : LogFormat "%H, %an, %ai"
              : NoMerges
              : options0
     options = unwords $ map show options1

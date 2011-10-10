@@ -19,7 +19,7 @@ instance Show CommandFlag where
   show (BeforeDate str)  = "--before=" ++ str
   show (AfterDate str)   = "--after=" ++ str
   show (LogFormat str)   = "--pretty=\"" ++ str ++ "\""
-  show (ShortStat)       = "--shortstat"
+  show (ShortStat)       = "--numstat"
   show (NoMerges)        = "--no-merges"
   show Help              = ""
 
