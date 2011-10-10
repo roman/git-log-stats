@@ -31,7 +31,7 @@ options =
     , Option [] ["help"]   (NoArg Help)               "display help message"
     ]
 
-parseOpts :: ([CommandFlag] -> IO ()) -> IO ()
+parseOpts :: ([String] -> [CommandFlag] -> IO ()) -> IO ()
 parseOpts fn = do
     args <- getArgs 
     case getOpt Permute options args of
@@ -41,11 +41,11 @@ parseOpts fn = do
           putStrLn ""
           putStrLn $ usageInfo "Expected Input:" options
           exitFailure
-      (expected, _, _) -> 
+      (expected, normal, _) -> 
         if Help `elem` expected 
           then do
             putStrLn $ usageInfo "Usage: Git [OPTION]" options
             exitSuccess
-          else fn expected
+          else fn normal expected
           
 
