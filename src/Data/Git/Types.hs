@@ -1,11 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Data.Git.Types where
 
-import           Data.ByteString    (ByteString)
-import           Data.Lens.Common   (getL)
-import           Data.Lens.Template (makeLenses)
-import           Data.Monoid        (Sum(..), mappend, mempty)
-import           Data.Set           (Set)
+import           Data.ByteString       (ByteString)
+import           Data.ByteString.Char8 (isInfixOf)
+import           Data.Lens.Common      (getL)
+import           Data.Lens.Template    (makeLenses)
+import           Data.Monoid           (Sum(..), mappend, mempty)
+import           Data.Set              (Set)
 
 import qualified Data.Set as Set
 
@@ -32,6 +33,17 @@ data GitCommit
   deriving (Show)
 
 makeLenses [''GitCommit, ''CommitFile]
+
+getLimitedAddedLines :: [ByteString] -> GitCommit -> Integer
+getLimitedAddedLines paths =
+    getSum .
+    Set.fold mappend mempty .
+    Set.map (Sum . getL cAddedLines) .
+    Set.filter (checkPathName paths) .
+    getL commitFiles
+  where
+    checkPathName paths cfile =
+        not $ any (getL cFileName cfile `isInfixOf`) paths
 
 getAddedLines :: GitCommit -> Integer
 getAddedLines =

@@ -1,6 +1,7 @@
 module Data.Git.Enumeratee.LinesPerDay where
 
 import Control.Monad (forM_)
+import Data.ByteString (ByteString)
 import Data.Lens.Common (getL)
 import Data.Enumerator (
     Enumeratee (..)
@@ -18,14 +19,16 @@ class Monad m => HasLinesPerDay m where
   registerLPD :: CommitAuthor -> CommitDate -> Integer -> m ()
 
 
-trackLinesPerDay :: HasLinesPerDay m => Enumeratee GitCommit GitCommit m b
-trackLinesPerDay step@(Yield {}) = yield step EOF
-trackLinesPerDay step@(Continue consumer) = continue go
+trackLinesPerDay :: HasLinesPerDay m 
+                 => [ByteString] 
+                 -> Enumeratee GitCommit GitCommit m b
+trackLinesPerDay _ step@(Yield {}) = yield step EOF
+trackLinesPerDay forbiddenPaths step@(Continue consumer) = continue go
   where
     go stream@(Chunks cs) = Iteratee $ do
       forM_ cs $ \commit -> 
         registerLPD (getL commitAuthor commit)
                     (getL commitDate   commit)
-                    (getAddedLines     commit)
-      runIteratee $ consumer stream >>== trackLinesPerDay
+                    (getLimitedAddedLines forbiddenPaths commit)
+      runIteratee $ consumer stream >>== trackLinesPerDay forbiddenPaths
     go EOF = consumer EOF >>== \step -> yield step EOF
