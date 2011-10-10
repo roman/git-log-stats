@@ -27,7 +27,7 @@ enumRepos :: MonadIO m
           -> Enumerator GitCommit m b
 enumRepos options =
     foldl1' (>==>) .
-    map (enumGitLog options $)
+    map (enumGitLog options)
 
 haveForbiddenPaths :: [CommandFlag] -> Maybe [ByteString]
 haveForbiddenPaths = safeHead . filter fn
