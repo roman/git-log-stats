@@ -27,11 +27,14 @@ enumGitLog :: MonadIO m
            -> Enumerator GitCommit m b
 enumGitLog _ _ step@(Yield {})= returnI step
 enumGitLog commandOpts0 repoPath (Continue consumer) = Iteratee $ do
-    output <- liftIO                   .
+    repoName <- liftIO $ 
+                Shell.basename `fmap` 
+                Shell.abspath repoPath
+    output   <- liftIO                  .
               Shell.bracketCD repoPath .
               Shell.run                $
               gitLogCommand commandOpts0
-    let result = P.parse GP.parse output
+    let result = P.parse (GP.parse repoName) output
     case result of
       P.Done _ logs -> runIteratee $ consumer (Chunks logs)
       P.Fail _ _ e  -> error e

@@ -10,7 +10,8 @@ type CommitDate = ByteString
 
 data GitCommit 
   = GitCommit  {
-    _commitHash   :: CommitHash
+    _commitRepo   :: String
+  , _commitHash   :: CommitHash
   , _commitAuthor :: CommitAuthor
   , _commitDate   :: CommitDate
   , _addedLines   :: Integer

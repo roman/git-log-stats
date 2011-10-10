@@ -11,24 +11,25 @@ isNewline c = c == '\n'
 tillComma = takeWhile (/= ',')
 tillNewline = takeWhile (not . isNewline)
 
-pLogEntry = 
-    GitCommit <$> (skipSpace *>
-                   tillComma <* 
+pLogEntry repoPath =
+    GitCommit <$> pure repoPath
+              <*> (skipSpace *>
+                   tillComma <*
                    char ',')
-              <*> (skipSpace *> 
-                   tillComma <* 
+              <*> (skipSpace *>
+                   tillComma <*
                    char ',')
               <*> (skipSpace *>
                    tillNewline)
               <*> (skipSpace *>
-                   tillComma *> 
-                   char ','  *> 
-                   skipSpace *> 
+                   tillComma *>
+                   char ','  *>
+                   skipSpace *>
                    decimal)
               <*> (tillComma *>
                    char ','  *>
-                   skipSpace *> 
+                   skipSpace *>
                    decimal   <*
                    tillNewline)
-               
-parse = many pLogEntry
+
+parse repoPath = many (pLogEntry repoPath)
