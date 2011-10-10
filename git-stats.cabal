@@ -59,7 +59,8 @@ Executable git-stats
     enumerator,
     filepath,
     HSH,
-    mtl
+    mtl,
+    split
 
 
   -- Modules not exported by this package.
