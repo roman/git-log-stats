@@ -462,7 +462,7 @@ code per year (about 20 per day).
 </code></pre>
 </div>
 <div class="slide">
-<h1 id="attoparsec-git-data-types"><a href="http://hackage.haskell.org/package/attoparsec">Attoparsec</a> (Git Data Types)</h1>
+<h1 id="attoparsec---git-data-types"><a href="http://hackage.haskell.org/package/attoparsec">Attoparsec</a> - Git Data Types</h1>
 <ul>
 <li>From that output we want to create a Haskell type like the following:</li>
 </ul>
@@ -490,7 +490,7 @@ data CommitFile
 </code></pre>
 </div>
 <div class="slide">
-<h1 id="attoparsec-parser-implementation"><a href="http://hackage.haskell.org/package/attoparsec">Attoparsec</a> (Parser implementation)</h1>
+<h1 id="attoparsec---parser-implementation"><a href="http://hackage.haskell.org/package/attoparsec">Attoparsec</a> - Parser implementation</h1>
 <ul>
 <li>For this given output:</li>
 </ul>
@@ -510,7 +510,7 @@ pCommitFiles =
 </code></pre>
 </div>
 <div class="slide">
-<h1 id="attoparsec-parser-implementation-1"><a href="http://hackage.haskell.org/package/attoparsec">Attoparsec</a> (Parser implementation)</h1>
+<h1 id="attoparsec---parser-implementation-1"><a href="http://hackage.haskell.org/package/attoparsec">Attoparsec</a> - Parser implementation</h1>
 <ul>
 <li>For this complete output:</li>
 </ul>
@@ -540,7 +540,7 @@ pGitCommit repoPath =
 </code></pre>
 </div>
 <div class="slide">
-<h1 id="attoparsec-parser-implementation-2"><a href="http://hackage.haskell.org/package/attoparsec">Attoparsec</a> (Parser implementation)</h1>
+<h1 id="attoparsec---parser-implementation-2"><a href="http://hackage.haskell.org/package/attoparsec">Attoparsec</a> - Parser implementation</h1>
 <ul>
 <li>The final parser that will get all the contents from the git log:</li>
 </ul>
@@ -594,7 +594,13 @@ getGitCommits flags repoPath = do
 <h1 id="enumerator"><a href="http://hackage.haskell.org/package/enumerator">Enumerator</a></h1>
 <ul>
 <li><p>A Library that provides an easy way to manage streams of data by using one or multiple producers, filters and a consumer</p></li>
-<li><p>Iteratee</p>
+<li>Iteratee</li>
+<li>Enumerator</li>
+<li><p>Enumeratee</p></li>
+</ul>
+</div>
+<div class="slide">
+<h1 id="enumerator---iteratee"><a href="http://hackage.haskell.org/package/enumerator">Enumerator</a> - Iteratee</h1>
 <ul>
 <li><p>takes input and does calculation.</p></li>
 <li><p>is executed by <code>run_</code> function.</p></li>
@@ -602,8 +608,10 @@ getGitCommits flags repoPath = do
 <li><p>can be considered as automaton.</p></li>
 <li><p>can be composed with another Iteratee by (&gt;&gt;=):</p></li>
 </ul>
-<p><code>Iteratee &gt;&gt;= Iteratee -&gt; Iteratee</code></p></li>
-<li><p>Enumerator</p>
+<p><code>Iteratee &gt;&gt;= Iteratee -&gt; Iteratee</code></p>
+</div>
+<div class="slide">
+<h1 id="enumerator---enumerator"><a href="http://hackage.haskell.org/package/enumerator">Enumerator</a> - Enumerator</h1>
 <ul>
 <li>can be composed with an Iteratee by ($$) resulting in another Iteratee:</li>
 </ul>
@@ -612,8 +620,10 @@ getGitCommits flags repoPath = do
 <li><p>carries forward the state of Iteratee (automaton) by feeding inputs.</p></li>
 <li><p>can be composed with another Enumerator by (&lt;==&lt;):</p></li>
 </ul>
-<p><code>Enumerator &lt;==&lt; Enumerator -&gt; Enumerator</code></p></li>
-<li><p>Enumeratee</p>
+<p><code>Enumerator &lt;==&lt; Enumerator -&gt; Enumerator</code></p>
+</div>
+<div class="slide">
+<h1 id="enumerator---enumeratee"><a href="http://hackage.haskell.org/package/enumerator">Enumerator</a> - Enumeratee</h1>
 <ul>
 <li><p>locates in between Enumerator and Iteratee, and may modify input.</p></li>
 <li><p>can be composed with Iteratee by =$ resulting in another Iteratee:</p></li>
@@ -622,11 +632,10 @@ getGitCommits flags repoPath = do
 <ul>
 <li>can be composed with Enumerator by $= resulting in another Enumerator:</li>
 </ul>
-<p><code>Enumerator $= Enumeratee --&gt; Enumerator</code></p></li>
-</ul>
+<p><code>Enumerator $= Enumeratee --&gt; Enumerator</code></p>
 </div>
 <div class="slide">
-<h1 id="enumerator-example"><a href="http://hackage.haskell.org/package/enumerator">Enumerator</a> (Example)</h1>
+<h1 id="enumerator---example"><a href="http://hackage.haskell.org/package/enumerator">Enumerator</a> - Example</h1>
 <ul>
 <li>Read a list of <code>Int</code> from stdin and return the sum of them</li>
 </ul>
@@ -651,7 +660,7 @@ readSum = go 0
 </code></pre>
 </div>
 <div class="slide">
-<h1 id="enumerator-example-1"><a href="http://hackage.haskell.org/package/enumerator">Enumerator</a> (Example)</h1>
+<h1 id="enumerator---example-1"><a href="http://hackage.haskell.org/package/enumerator">Enumerator</a> - Example</h1>
 <ul>
 <li>Using the Enumerator library</li>
 </ul>

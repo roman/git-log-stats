@@ -45,7 +45,7 @@
 13  5 src/System/Console/Options.hs
 ~~~
 
-# [Attoparsec] (Git Data Types)
+# [Attoparsec] - Git Data Types
 
 * From that output we want to create a Haskell type like the following:
 
@@ -74,7 +74,7 @@ data CommitFile
 
 ~~~
 
-# [Attoparsec] (Parser implementation)
+# [Attoparsec] - Parser implementation
 
 * For this given output:
 
@@ -96,7 +96,7 @@ pCommitFiles =
                     tillNewline)
 ~~~
 
-# [Attoparsec] (Parser implementation)
+# [Attoparsec] - Parser implementation
 
 * For this complete output:
 
@@ -129,7 +129,7 @@ pGitCommit repoPath =
 ~~~
 
 
-# [Attoparsec] (Parser implementation)
+# [Attoparsec] - Parser implementation
 
 * The final parser that will get all the contents from the git log:
 
@@ -191,47 +191,51 @@ getGitCommits flags repoPath = do
   one or multiple producers, filters and a consumer
 
 * Iteratee
-
-    * takes input and does calculation.
-
-    * is executed by `run_` function.
-
-    * can perform side-effects if IO is specified.
-
-    * can be considered as automaton.
-
-    * can be composed with another Iteratee by (>>=):
-
-      `Iteratee >>= Iteratee -> Iteratee`
-
-
 * Enumerator
-
-    * can be composed with an Iteratee by ($$) resulting in another Iteratee:
-
-      `Enumerator $$ Iteratee -> Iteratee`
-
-    * carries forward the state of Iteratee (automaton) by feeding inputs.
-
-    * can be composed with another Enumerator by (<==<):
-
-      `Enumerator <==< Enumerator -> Enumerator`
-
 * Enumeratee
 
-    * locates in between Enumerator and Iteratee, and may modify input.
-
-    * can be composed with Iteratee by =$ resulting in another Iteratee:
-
-      `Enumeratee =$ Iteratee --> Iteratee`
-
-    * can be composed with Enumerator by $= resulting in another Enumerator:
-
-      `Enumerator $= Enumeratee --> Enumerator`
+# [Enumerator] - Iteratee
 
 
+* takes input and does calculation.
 
-# [Enumerator] (Example)
+* is executed by `run_` function.
+
+* can perform side-effects if IO is specified.
+
+* can be considered as automaton.
+
+* can be composed with another Iteratee by (>>=):
+
+  `Iteratee >>= Iteratee -> Iteratee`
+
+
+# [Enumerator] - Enumerator
+
+* can be composed with an Iteratee by ($$) resulting in another Iteratee:
+
+  `Enumerator $$ Iteratee -> Iteratee`
+
+* carries forward the state of Iteratee (automaton) by feeding inputs.
+
+* can be composed with another Enumerator by (<==<):
+
+  `Enumerator <==< Enumerator -> Enumerator`
+
+# [Enumerator] - Enumeratee
+
+* locates in between Enumerator and Iteratee, and may modify input.
+
+* can be composed with Iteratee by =$ resulting in another Iteratee:
+
+  `Enumeratee =$ Iteratee --> Iteratee`
+
+* can be composed with Enumerator by $= resulting in another Enumerator:
+
+  `Enumerator $= Enumeratee --> Enumerator`
+
+
+# [Enumerator] - Example
 
 * Read a list of `Int` from stdin and return the sum of them
 
@@ -256,7 +260,7 @@ readSum = go 0
           readSum (accum + n)
 ~~~
 
-# [Enumerator] (Example)
+# [Enumerator] - Example
 
 * Using the Enumerator library
 
