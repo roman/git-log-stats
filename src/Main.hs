@@ -13,6 +13,8 @@ import           Data.Enumerator (
   )
 import qualified Data.Enumerator.List as EL
 import           Data.Maybe (fromMaybe)
+import           System.Exit (exitFailure)
+
 
 import           App
 import           Data.Git.Types
@@ -33,17 +35,25 @@ haveForbiddenPaths :: [CommandFlag] -> Maybe [ByteString]
 haveForbiddenPaths = safeHead . filter fn
   where
     fn (ForbiddenPaths {}) = True
-    fn _ = False 
+    fn _ = False
     safeHead [] = Nothing
     safeHead [ForbiddenPaths xs] = Just xs
 
 
 main :: IO ()
-main = parseOpts $ \repos options -> do
+main = parseOpts start
+
+
+start :: [String] -> [CommandFlag] -> IO ()
+start [] _ =
+    putStrLn "ERROR: Specify at least one git repo path" >>
+    exitFailure
+start repos options = do
     let enum = enumRepos options repos
-    let forbiddenPaths = fromMaybe [] $ haveForbiddenPaths options 
+    let forbiddenPaths = fromMaybe [] $ haveForbiddenPaths options
     let it = trackLinesPerDay forbiddenPaths
            =$ EL.consume
     (_, state) <- runAppMonad $ run_ (enum $$ it)
     let result = avgLinesPerDay "Roman Gonzalez" state
     putStrLn $ "The avg code per day for Roman is " ++ show result
+
