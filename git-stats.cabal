@@ -52,7 +52,6 @@ Executable git-stats
     attoparsec,
     base,
     bytestring,
-    cmdlib,
     containers,
     data-lens,
     data-lens-template,
